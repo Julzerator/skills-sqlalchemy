@@ -1,6 +1,7 @@
 """Models and database functions for Ratings project."""
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 
 # This is the connection to the SQLite database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -17,9 +18,14 @@ class Model(db.Model):
     __tablename__ = "models"
     
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    year = db.Column(db.Unicode(4), nullable=False)
+    year = db.Column(db.Integer, nullable=False)
     brand_name = db.Column(db.String(50), nullable=True)
     name = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Model id=%s name=%s>" % (self.id, self.name)
 
 
 class Brand(db.Model):
@@ -28,9 +34,14 @@ class Brand(db.Model):
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    founded = db.Column(db.Unicode(4), nullable=False)
+    founded = db.Column(db.Integer, nullable=False)
     headquarters = db.Column(db.String(50), nullable=True)
-    discontinued = db.Column(db.Unicode(4), nullable=False)
+    discontinued = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Brand id=%s name=%s>" % (self.id, self.name)
 
 # End Part 1
 ##############################################################################
@@ -45,7 +56,6 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
-
 
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
